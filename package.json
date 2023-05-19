@@ -1,0 +1,26 @@
+{
+  "name": "flexidoro-core",
+  "version": "1.0.0",
+  "description": "Flexidoro Class",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "tsc-init": "tsc --init"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Slendy4514/flexidoro-core.git"
+  },
+  "author": "Slendy4514",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Slendy4514/flexidoro-core/issues"
+  },
+  "homepage": "https://github.com/Slendy4514/flexidoro-core#readme",
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "ts-node-dev": "^2.0.0"
+  }
+}
