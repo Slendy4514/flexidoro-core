@@ -11,8 +11,7 @@ describe("Sessión", () => {
 })
 
 describe("Sesión - cruzando el breakpoint con penalización", () => {
-    const flex = new Flexidoro()
-    flex.setMode("break")
+    const flex = new Flexidoro({mode: "break"})
     flex.setMode("session", Date.now() + 1000 * 60 * 5)
     it("Session despues de cambio", () => expect(flex.getBonus(Date.now() + 1000 * 60 * 5)).toBe(-30))
     it("Session despues de cambio + 10 min", () => expect(flex.getBonus(Date.now() + 1000 * 60 * (5 + 10))).toBe(-20))
@@ -26,8 +25,7 @@ describe("Sesión - cruzando el breakpoint con penalización", () => {
 
 //Break
 describe("Break - cruzando el breakpoint sin bonus", () => {
-    const flex = new Flexidoro()
-    flex.setMode("break")
+    const flex = new Flexidoro({mode: "break"})
     it("Cambiar de modo sin tener bonus", () => expect(flex.getBonus()).toBe(-15))
     it("Cambiar de modo sin tener bonus", () => expect(flex.getBonus(Date.now() + 1000 * 60 * 5)).toBe(-30))
     it("Cambiar de modo sin tener bonus", () => expect(flex.getBonus(Date.now() + 1000 * 60 * 10)).toBe(-45))
@@ -55,7 +53,7 @@ describe("LongBreak - modo pausa", () => {
 //Bonus despues de desactivado
 describe("LongBreak - modo pausa", () => {
     const flex = new Flexidoro()
-    flex.setActive(false, Date.now() + 1000 * 60 * 30)
+    flex.setActive(false, Date.now() + 1000 * 60 * 30) //Bonus = 10
     flex.setActive(true, Date.now() + 1000 * 60 * 60)
     it("La bonus se mantiene en el tiempo", () => expect(flex.getBonus(Date.now() + 1000 * 60 * 60)).toBe(10))
 })

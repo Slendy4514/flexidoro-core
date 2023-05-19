@@ -1,16 +1,16 @@
 type Mode = "session" | "break" | "longbreak"
 
 interface flexidoroData{
-    active : boolean,
-    execution : number
-    mode : Mode,
-    start : number,
-    lastInterval : number,
-    intervals : ModeValues,
-    penalty : PartialModeValues
-    reward : number,
-    longbreakCost : number
-    bonus : number
+    active? : boolean,
+    execution? : number
+    mode? : Mode,
+    start? : number,
+    lastInterval? : number,
+    intervals? : ModeValues,
+    penalty? : PartialModeValues
+    reward? : number,
+    longbreakCost? : number
+    bonus? : number
 }
 
 interface PartialModeValues{
@@ -21,45 +21,6 @@ interface PartialModeValues{
 interface ModeValues extends PartialModeValues{
     session : number
 }
-
-const defaultFlexidoro : flexidoroData = {
-        active : true,
-        execution : 0,
-        mode : "session",
-        start : Date.now(),
-        lastInterval : Date.now(),
-        intervals : {
-            session : 15,
-            break : 5,
-            longbreak : 0
-        },
-        penalty : {
-            break : 15,
-            longbreak : 0
-        },
-        reward : 5,
-        longbreakCost : 15,
-        bonus : 0,
-    }
-
-    // {
-    //     mode = "session", 
-    //     start = Date.now(),
-    //     lastInterval = Date.now(),
-    //     bonus = 0,
-    //     intervals = {
-    //         session : 15,
-    //         break : 5,
-    //         longbreak : 0
-    //     },
-    //     penalty = {
-    //         break : 15,
-    //         longbreak : 0
-    //     },
-    //     reward = 5,
-    //     active = false,
-    //     longbreakCost = 15,
-    //     execution = 0}
 
 export class Flexidoro{
     private mode : Mode
@@ -73,7 +34,24 @@ export class Flexidoro{
     private reward : number
     private longbreakCost : number
     private execution : number
-    constructor( {active, mode, start, lastInterval, intervals, penalty, bonus, reward, longbreakCost, execution} : flexidoroData = defaultFlexidoro){
+    constructor( {
+            mode = "session", 
+            start = Date.now(),
+            lastInterval = Date.now(),
+            bonus = 0,
+            intervals = {
+                session : 15,
+                break : 5,
+                longbreak : 0
+            },
+            penalty = {
+                break : 15,
+                longbreak : 0
+            },
+            reward = 5,
+            active = true,
+            longbreakCost = 15,
+            execution = 0} : flexidoroData = {}){
         this.active = active
         this.mode = mode
         this.start = start

@@ -13,7 +13,6 @@ describe("getTime - Intervalo default - 15 min)", () => {
     it("Pasado 2 intervalos", () => expect(flex.getTime(Date.now() + 1000 * 60 * 15 * 2)).toBe("14:59"))
 })
 
-
 describe("getTime - al detenerse el reloj", () => {
     const flex = new Flexidoro()
     flex.setMode("longbreak")

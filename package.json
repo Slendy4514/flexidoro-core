@@ -2,14 +2,20 @@
   "name": "flexidoro-core",
   "version": "1.0.0",
   "description": "Flexidoro Class",
-  "main": "index.js",
+  "main": "flexidoro.js",
   "scripts": {
     "test": "vitest",
-    "tsc-init": "tsc --init"
+    "tsc-init": "tsc --init",
+    "build": "tsc --project tsconfig.esm.json & tsc --project tsconfig.cjs.json"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Slendy4514/flexidoro-core.git"
+  },
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js",
+    "default": "./dist/esm/index.js"
   },
   "author": "Slendy4514",
   "license": "ISC",
