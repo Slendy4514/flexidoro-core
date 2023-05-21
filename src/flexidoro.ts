@@ -6,11 +6,17 @@ interface flexidoroData{
     mode? : Mode,
     start? : number,
     lastInterval? : number,
-    intervals? : ModeValues,
-    penalty? : PartialModeValues
+    intervals? : ModeValuesData,
+    penalty? : ModeValuesData,
     reward? : number,
     longbreakCost? : number
     bonus? : number
+}
+
+interface ModeValuesData{
+    session? : number,
+    break? : number,
+    longbreak? : number,
 }
 
 interface PartialModeValues{
@@ -39,15 +45,8 @@ export class Flexidoro{
             start = Date.now(),
             lastInterval = Date.now(),
             bonus = 0,
-            intervals = {
-                session : 15,
-                break : 5,
-                longbreak : 0
-            },
-            penalty = {
-                break : 15,
-                longbreak : 0
-            },
+            intervals : { session : intervalSession = 15, break : intervalBreak = 5, longbreak : intervalLongbreak = 0 } = {},
+            penalty : {break : penaltyBreak = 15, longbreak : penaltyLongbreak = 0} = {},
             reward = 5,
             active = true,
             longbreakCost = 15,
@@ -56,9 +55,9 @@ export class Flexidoro{
         this.mode = mode
         this.start = start
         this.lastInterval = lastInterval
-        this.interval = intervals.session
-        this.intervals = {break : intervals.break, longbreak : intervals.longbreak}
-        this.penalty = penalty
+        this.interval = intervalSession
+        this.intervals = {break : intervalBreak, longbreak : intervalLongbreak}
+        this.penalty = {break : penaltyBreak, longbreak : penaltyLongbreak}
         this.bonus = bonus
         this.reward = reward
         this.longbreakCost = longbreakCost
@@ -83,6 +82,12 @@ export class Flexidoro{
 
     private passedMin(at : number = Date.now()) : number{
         return Math.floor((at - this.lastInterval) / 1000 / 60)
+    }
+
+    public getExecutionTime(at : number = Date.now()){
+        console.log(this.execution, this.start, at)
+        if(this.active) return this.execution + at - this.start
+        return this.execution
     }
 
     private getCurrentInterval(at : number = Date.now()){
@@ -120,12 +125,13 @@ export class Flexidoro{
     }
 
     public setMode(mode : Mode, at : number = Date.now()){
+        if(mode === this.mode) return
         this.bonus = this.getBonus(at)
         this.lastInterval = at
         this.mode = mode
         //Longbreak
         if(mode !== "longbreak") return
-        this.intervals.longbreak || this.setActive(false)
+        this.intervals.longbreak || this.setActive(false, at)
         if(this.longbreakCost) this.bonus -= this.longbreakCost
     }
 

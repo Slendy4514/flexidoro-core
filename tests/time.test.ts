@@ -18,3 +18,14 @@ describe("getTime - al detenerse el reloj", () => {
     flex.setMode("longbreak")
     it("Al pausar", () => expect(flex.getTime()).toBe("00:00"))
 })
+
+describe("Executed Time", () => {
+    const flex = new Flexidoro()
+    flex.setMode("longbreak", Date.now() + 1000 * 60 * 10)
+    it("Al pausar", () => expect(flex.getExecutionTime(Date.now() + 1000 * 60 * 10)).toBe(10000))
+    it("Pausa + 30 min", () => expect(flex.getExecutionTime(Date.now() + 1000 * 60 * 10 + 30)).toBe(10000))
+    flex.setActive(true, Date.now() + 1000 * 60 * (10 + 30))
+    it("Al Reanudar", () => expect(flex.getExecutionTime(Date.now() + 1000 * 60 * (10 + 30))).toBe(10000))
+    it("Pasados 10 min", () => expect(flex.getExecutionTime(Date.now() + 1000 * 60 * (10 + 30 + 10))).toBe(20000))
+})
+
