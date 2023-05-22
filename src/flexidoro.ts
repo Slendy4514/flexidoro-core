@@ -1,6 +1,6 @@
 type Mode = "session" | "break" | "longbreak"
 
-interface flexidoroData{
+export interface flexidoroData{
     active? : boolean,
     execution? : ModeValuesData
     mode? : Mode,
@@ -13,18 +13,18 @@ interface flexidoroData{
     bonus? : number
 }
 
-interface ModeValuesData{
+export interface ModeValuesData{
     session? : number,
     break? : number,
     longbreak? : number,
 }
 
-interface PartialModeValues{
+export interface PartialModeValues{
     break : number,
     longbreak : number,
 }
 
-interface ModeValues extends PartialModeValues{
+export interface ModeValues extends PartialModeValues{
     session : number
 }
 
@@ -84,6 +84,10 @@ export class Flexidoro{
 
     private passedMin(at : number = Date.now()) : number{
         return Math.floor((at - this.lastInterval) / 1000 / 60)
+    }
+
+    public getStart(){
+        return this.start
     }
 
     public getExecutionTime(at : number = Date.now()){
