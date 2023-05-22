@@ -2,7 +2,8 @@
   "name": "flexidoro-core",
   "version": "1.0.1",
   "description": "Flexidoro Class",
-  "main": "./dist/esm/flexidoro.js",
+  "main": "dist/esm/flexidoro.js",
+  "types": "dist/types/src/flexidoro.d.ts",
   "scripts": {
     "test": "vitest",
     "tsc-init": "tsc --init",
