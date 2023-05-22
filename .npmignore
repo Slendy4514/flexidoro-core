@@ -1,0 +1,4 @@
+tests/
+tsconfig*
+node_modules/
+.gitattributes
