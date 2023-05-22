@@ -2,7 +2,7 @@ type Mode = "session" | "break" | "longbreak"
 
 interface flexidoroData{
     active? : boolean,
-    execution? : number
+    execution? : ModeValuesData
     mode? : Mode,
     start? : number,
     lastInterval? : number,
@@ -40,6 +40,7 @@ export class Flexidoro{
     private reward : number
     private longbreakCost : number
     private execution : number
+    private executionMode : ModeValues
     constructor( {
             mode = "session", 
             start = Date.now(),
@@ -50,7 +51,7 @@ export class Flexidoro{
             reward = 5,
             active = true,
             longbreakCost = 15,
-            execution = 0} : flexidoroData = {}){
+            execution : { session : execSession = 0, break : execBreak = 0, longbreak : execLongbreak = 0 } = {}} : flexidoroData = {}){
         this.active = active
         this.mode = mode
         this.start = start
@@ -61,7 +62,8 @@ export class Flexidoro{
         this.bonus = bonus
         this.reward = reward
         this.longbreakCost = longbreakCost
-        this.execution = execution
+        this.execution = execSession + execBreak + execLongbreak
+        this.executionMode = {session : execSession, break : penaltyBreak, longbreak : penaltyLongbreak}
     }
 
     //Calculo de tiempo
@@ -85,9 +87,13 @@ export class Flexidoro{
     }
 
     public getExecutionTime(at : number = Date.now()){
-        console.log(this.execution, this.start, at)
         if(this.active) return this.execution + at - this.start
         return this.execution
+    }
+
+    public getModeExecution(mode : Mode, at : number = Date.now()){
+        if(mode === this.mode) return this.executionMode[mode] + at - this.start
+        return this.executionMode[mode]
     }
 
     private getCurrentInterval(at : number = Date.now()){
@@ -128,6 +134,7 @@ export class Flexidoro{
         if(mode === this.mode) return
         this.bonus = this.getBonus(at)
         this.lastInterval = at
+        if(this.active) this.executionMode[this.mode] += at - this.start
         this.mode = mode
         //Longbreak
         if(mode !== "longbreak") return

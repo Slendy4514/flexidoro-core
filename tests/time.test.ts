@@ -20,12 +20,79 @@ describe("getTime - al detenerse el reloj", () => {
 })
 
 describe("Executed Time", () => {
+    const close = 1 / 100000
     const flex = new Flexidoro()
+    const inicio = flex.getExecutionTime() * close
+    it("Al iniciar", () => expect(inicio).toBeCloseTo(close))
+    const min10 = flex.getExecutionTime(Date.now() + 1000 * 60 * 10) * close
+    it("A los 10 min", () => expect(min10).toBeCloseTo(1000 * 60 * 10 * close))
     flex.setMode("longbreak", Date.now() + 1000 * 60 * 10)
-    it("Al pausar", () => expect(flex.getExecutionTime(Date.now() + 1000 * 60 * 10)).toBe(10000))
-    it("Pausa + 30 min", () => expect(flex.getExecutionTime(Date.now() + 1000 * 60 * 10 + 30)).toBe(10000))
+    it("Al pausar", () => expect(min10).toBeCloseTo(1000 * 60 * 10 * close))
+    const pausa30 = flex.getExecutionTime(Date.now() + 1000 * 60 * (10 + 30)) * close
+    it("Pausa + 30 min", () => expect(pausa30).toBeCloseTo(1000 * 60 * 10  * close))
     flex.setActive(true, Date.now() + 1000 * 60 * (10 + 30))
-    it("Al Reanudar", () => expect(flex.getExecutionTime(Date.now() + 1000 * 60 * (10 + 30))).toBe(10000))
-    it("Pasados 10 min", () => expect(flex.getExecutionTime(Date.now() + 1000 * 60 * (10 + 30 + 10))).toBe(20000))
+    const inactive = 10 + 30
+    const min10_30 = flex.getExecutionTime(Date.now() + 1000 * 60 * (inactive)) * close
+    it("Al Reanudar", () => expect(min10_30).toBeCloseTo(1000 * 60 * 10 * close))
+    const reanuda10 = flex.getExecutionTime(Date.now() + 1000 * 60 * (inactive + 10)) * close
+    it("Pasados 10 min", () => expect(reanuda10).toBeCloseTo(1000 * 60 * 20 * close))
+    flex.setMode("longbreak", Date.now() + 1000 * 60 * (inactive + 20))
+    const reanuda20 = flex.getExecutionTime(Date.now() + 1000 * 60 * (inactive + 20)) * close
+    it("Pasados 20 min y pausa", () => expect(reanuda20).toBeCloseTo(1000 * 60 * 30 * close))
 })
 
+describe("Executed Modes - Session", () => {
+    const close = 1 / 100000
+    const flex = new Flexidoro()
+    const inicio = flex.getModeExecution("session") * close
+    it("Al iniciar", () => expect(inicio).toBeCloseTo(close))
+    const min10 = flex.getModeExecution("session", Date.now() + 1000 * 60 * 10) * close
+    it("A los 10 min", () => expect(min10).toBeCloseTo(1000 * 60 * 10 * close))
+    flex.setMode("break", Date.now() + 1000 * 60 * 10)
+    it("Al cambiar de modo", () => expect(min10).toBeCloseTo(1000 * 60 * 10 * close))
+    const break30  = flex.getModeExecution("session", Date.now() + 1000 * 60 * (10 + 30)) * close
+    it("Break + 30 min", () => expect(break30).toBeCloseTo(1000 * 60 * 10 * close))
+    flex.setMode("session", Date.now() + 1000 * 60 * (10 + 30))
+})
+
+describe("Executed Modes - Session con pausa", () => {
+    const close = 1 / 100000
+    const flex = new Flexidoro()
+    const inicio = flex.getModeExecution("session") * close
+    it("Al iniciar", () => expect(inicio).toBeCloseTo(close))
+    const min10 = flex.getModeExecution("session", Date.now() + 1000 * 60 * 10) * close
+    it("A los 10 min", () => expect(min10).toBeCloseTo(1000 * 60 * 10 * close))
+    flex.setMode("longbreak", Date.now() + 1000 * 60 * 10)
+    it("Al cambiar de modo", () => expect(min10).toBeCloseTo(1000 * 60 * 10 * close))
+    const break30  = flex.getModeExecution("session", Date.now() + 1000 * 60 * (10 + 30)) * close
+    it("Break + 30 min", () => expect(break30).toBeCloseTo(1000 * 60 * 10 * close))
+    flex.setMode("session", Date.now() + 1000 * 60 * (10 + 30))
+})
+
+describe("Executed Modes - Break", () => {
+    const close = 1 / 100000
+    const flex = new Flexidoro({mode : "break"})
+    const inicio = flex.getModeExecution("break") * close
+    it("Al iniciar", () => expect(inicio).toBeCloseTo(close))
+    const min10 = flex.getModeExecution("break", Date.now() + 1000 * 60 * 10) * close
+    it("A los 10 min", () => expect(min10).toBeCloseTo(1000 * 60 * 10 * close))
+    flex.setMode("session", Date.now() + 1000 * 60 * 10)
+    it("Al cambiar de modo", () => expect(min10).toBeCloseTo(1000 * 60 * 10 * close))
+    const break30  = flex.getModeExecution("break", Date.now() + 1000 * 60 * (10 + 30)) * close
+    it("Break + 30 min", () => expect(break30).toBeCloseTo(1000 * 60 * 10 * close))
+    flex.setMode("break", Date.now() + 1000 * 60 * (10 + 30))
+})
+
+describe("Executed Modes - LongBreak", () => {
+    const close = 1 / 100000
+    const flex = new Flexidoro({intervals : {longbreak : 15}, mode : "longbreak"})
+    const inicio = flex.getModeExecution("longbreak") * close
+    it("Al iniciar", () => expect(inicio).toBeCloseTo(close))
+    const min10 = flex.getModeExecution("longbreak", Date.now() + 1000 * 60 * 10) * close
+    it("A los 10 min", () => expect(min10).toBeCloseTo(1000 * 60 * 10 * close))
+    flex.setMode("session", Date.now() + 1000 * 60 * 10)
+    it("Al cambiar de modo", () => expect(min10).toBeCloseTo(1000 * 60 * 10 * close))
+    const break30  = flex.getModeExecution("longbreak", Date.now() + 1000 * 60 * (10 + 30)) * close
+    it("Break + 30 min", () => expect(break30).toBeCloseTo(1000 * 60 * 10 * close))
+    flex.setMode("longbreak", Date.now() + 1000 * 60 * (10 + 30))
+})
