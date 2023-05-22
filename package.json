@@ -24,9 +24,7 @@
   },
   "homepage": "https://github.com/Slendy4514/flexidoro-core#readme",
   "devDependencies": {
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.4"
-  },
-  "dependencies": {
-    "ts-node-dev": "^2.0.0"
   }
 }
