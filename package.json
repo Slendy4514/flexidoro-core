@@ -1,6 +1,6 @@
 {
   "name": "flexidoro-core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Flexidoro Class",
   "main": "dist/esm/flexidoro.js",
   "types": "dist/types/src/flexidoro.d.ts",
